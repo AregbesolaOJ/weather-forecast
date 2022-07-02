@@ -12,23 +12,24 @@ export function useWeatherData(location) {
 
   const getFiveDaysWeatherData = useCallback(() => {
     setLoading(true);
-    fetch(`https://${API_Host}/forecast?q=${location}&mode="json"`, {
-      method: 'GET',
-      headers: {}
-    })
-      // fetch(`https://jsonplaceholder.typicode.com/comments?postId=${location}`, {
-      //   method: 'GET'
-      // })
+    fetch(
+      `https://${process.env.REACT_APP_API_HOST}/forecast?q=${location}&lang="en"&units="metric"&mode="json"`,
+      {
+        method: 'GET',
+        headers: {
+          'X-RapidAPI-Key': process.env.REACT_APP_API_KEY,
+          'X-RapidAPI-Host': process.env.REACT_APP_API_HOST
+        }
+      }
+    )
       .then((response) => response.json())
       .then((response) => {
-        console.log({ response });
         setData(response);
         setLocationWeatherMeta(response);
         setError(null);
         setLoading(false);
       })
       .catch((err) => {
-        console.log({ err });
         setError('Something went wrong, please try again later');
         setLoading(false);
         setData(null);
@@ -41,13 +42,11 @@ export function useWeatherData(location) {
   }, [getFiveDaysWeatherData]);
 
   useEffect(() => {
-    console.log(location, { locationWeatherMeta });
-
     if (!data) {
       setData(locationWeatherMeta || null);
     }
     return () => {};
-  }, [data, locationWeatherMeta, location]);
+  }, [data, locationWeatherMeta]);
 
   return { loading, error, data };
 }

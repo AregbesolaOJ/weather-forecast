@@ -1,6 +1,5 @@
-import { useState } from 'react';
 import { Alert, Accordion, Card, Row, Col, Spinner } from 'react-bootstrap';
-import { useLocalStorage } from '../hooks/useLocalStorage';
+import { useNavigate } from 'react-router-dom';
 import { useWeatherData } from '../hooks/useWeatherData';
 import {
   dateFormater,
@@ -12,13 +11,10 @@ import {
 import { WeatherIcon } from './WeatherIcon';
 import { WeatherInfo } from './WeatherInfo';
 
-export function CityCard({ id, name, price, location }) {
-  const [loading] = useState(null);
-  const [error] = useState(null);
+export function CityCard({ location }) {
+  const { loading, data, error } = useWeatherData(location);
 
-  //   const { loading, data, error } = useWeatherData(location);
-  const [data] = useLocalStorage(location, {});
-
+  const navigate = useNavigate();
   const { city, list } = data || {};
 
   const myList = sortWeatherByDates(list);
@@ -46,17 +42,28 @@ export function CityCard({ id, name, price, location }) {
           </div>
         ) : data === null || data.message || error ? (
           <div className="d-flex justify-content-center align-items-center h-100">
-            <Alert variant="info">{`${location} ${
-              data?.message || error || ''
-            } ...`}</Alert>
+            <Alert variant="info">
+              {`Failed to fetch weather reports for ${location}: ${
+                data?.message || error || ''
+              } ...`}
+            </Alert>
           </div>
         ) : (
           <>
             <Card.Title className="d-flex justify-content-between align-items-center mb-4">
-              <span className="fs-2">
-                {city ? `${city.name}, ${city.country}` : location}
-              </span>
-              {/* <Spinner color="blue" size="sm" animation="grow" /> */}
+              <Card.Link
+                as="a"
+                onClick={() =>
+                  navigate(location.toLowerCase(), {
+                    state: { lat: city?.coord?.lat, lon: city?.coord?.lon }
+                  })
+                }
+              >
+                <span className="fs-2">
+                  {city ? `${city.name}, ${city.country}` : location}
+                </span>
+              </Card.Link>
+
               {description ? <WeatherIcon description={description} /> : null}
             </Card.Title>
             <Card.Subtitle className="mb-3">
@@ -79,18 +86,6 @@ export function CityCard({ id, name, price, location }) {
                     {city?.coord?.lat || 0}
                   </span>
                 </Col>
-                {/* <Col>
-                  <span className="paragraph">Sunrise: </span>
-                  <span className="paragraph text-muted">
-                    {dateFormater(city?.sunrise, 'clock')}
-                  </span>
-                </Col>
-                <Col>
-                  <span className="paragraph">Sunset: </span>
-                  <span className="paragraph text-muted">
-                    {dateFormater(city?.sunset, 'clock')}
-                  </span>
-                </Col> */}
                 <Col>
                   <span className="paragraph">Time Zone: </span>
                   <span className="paragraph text-muted">
@@ -99,15 +94,15 @@ export function CityCard({ id, name, price, location }) {
                 </Col>
               </Row>
             </Card.Subtitle>
-            <div className="mt-auto">
+            <div className="mt-2">
               <span className="h6">Today's Weather</span>
               {description ? (
-                <span className="text-capitalize paragraph-sm text-muted">
+                <span className="text-capitalize paragraph text-muted">
                   {' '}
                   - {description}
                 </span>
               ) : null}
-              <Row className="g-3 mt-3" sm={3} xs={2}>
+              <Row className="g-3 pt-2" sm={3} xs={2}>
                 <Col>
                   <span className="paragraph-sm">Humidity: </span>
                   <span className="paragraph-sm text-muted">
@@ -120,12 +115,6 @@ export function CityCard({ id, name, price, location }) {
                     {wind?.speed || 0}
                   </span>
                 </Col>
-                {/* <Col>
-                  <span className="paragraph-sm">Temperature: </span>
-                  <span className="paragraph-sm text-muted">
-                    {main?.temp || 0}
-                  </span>
-                </Col> */}
                 <Col>
                   <span className="paragraph-sm">Feels Like: </span>
                   <span className="paragraph-sm text-muted">
@@ -154,8 +143,8 @@ export function CityCard({ id, name, price, location }) {
             </div>
             {Object.keys(remainingDays)?.length > 0 ? (
               <Accordion className="mt-4">
-                {Object.keys(remainingDays).map((day) => (
-                  <Accordion.Item eventKey={day}>
+                {Object.keys(remainingDays).map((day, index) => (
+                  <Accordion.Item eventKey={day} key={index}>
                     <Accordion.Header>
                       {dateFormater(day, 'month')}
                     </Accordion.Header>
