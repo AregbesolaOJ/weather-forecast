@@ -1,9 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useLocalStorage } from './useLocalStorage';
 
-const API_Key = 'e33e922f84msh2c5450e84e2b393p1d5f26jsn03c4b9d84e85';
-const API_Host = 'community-open-weather-map.p.rapidapi.com';
-
 export function useWeatherData(location) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -17,10 +14,7 @@ export function useWeatherData(location) {
     setLoading(true);
     fetch(`https://${API_Host}/forecast?q=${location}&mode="json"`, {
       method: 'GET',
-      headers: {
-        'X-RapidAPI-Key': API_Key,
-        'X-RapidAPI-Host': API_Host
-      }
+      headers: {}
     })
       // fetch(`https://jsonplaceholder.typicode.com/comments?postId=${location}`, {
       //   method: 'GET'
