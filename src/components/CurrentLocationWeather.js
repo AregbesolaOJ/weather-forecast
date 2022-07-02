@@ -1,6 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
 import {
-  Button,
   Toast,
   ToastContainer,
   Card,
@@ -11,6 +10,7 @@ import {
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { formatNumberWithCommas, getTimeZone } from '../utilities';
 import { WeatherIcon } from './WeatherIcon';
+import { Button } from './Button';
 
 export function CurrentLocationWeather() {
   const [showToast, setShowToast] = useState(false);

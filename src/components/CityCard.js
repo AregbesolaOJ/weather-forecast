@@ -32,7 +32,7 @@ export function CityCard({ location }) {
 
   const { description } = weather?.[0] || {};
   return (
-    <Card className="h-100">
+    <Card className="h-100" data-testid="card">
       <Card.Body className="d-flex flex-column">
         {loading ? (
           <div className="d-flex justify-content-center align-items-center h-100">
