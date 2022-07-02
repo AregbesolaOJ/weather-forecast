@@ -42,9 +42,11 @@ export function CityCard({ location }) {
           </div>
         ) : data === null || data.message || error ? (
           <div className="d-flex justify-content-center align-items-center h-100">
-            <Alert variant="info">{`${location} ${
-              data?.message || error || ''
-            } ...`}</Alert>
+            <Alert variant="info">
+              {`Failed to fetch weather reports for ${location}: ${
+                data?.message || error || ''
+              } ...`}
+            </Alert>
           </div>
         ) : (
           <>
