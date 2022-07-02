@@ -1,22 +1,12 @@
 import timeZones from '../data/timezones.json';
 
-const CURRENCY_FORMATTER = new Intl.NumberFormat(undefined, {
-  currency: 'USD',
-  style: 'currency'
-});
-
-export function formatCurrency(number) {
-  return CURRENCY_FORMATTER.format(number);
-}
-
 export function formatNumberWithCommas(number) {
   return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
 export function getTemperature(temp_in_fahrenheit) {
   const celsius = (5 / 9) * (temp_in_fahrenheit - 32);
-  const celsius2 = (5 / 9) * (celsius - 32);
-  return celsius2.toFixed(2);
+  return `${celsius.toFixed(2)} C`;
 }
 
 export function getTimeZone(seconds) {
@@ -39,12 +29,6 @@ export function sortWeatherByDates(list = []) {
 
   return listObj;
 }
-
-export const capitalizeFirstLetter = (string) => {
-    if (string) {
-      return string.toLowerCase().replace(/^\w/, (c) => c.toUpperCase());
-    }
-  };
 
 export function dateFormater(date, format) {
   if (date) {
@@ -79,14 +63,6 @@ export function dateFormater(date, format) {
     const time = `${hours}:${minutes}${ampm}`;
 
     switch (format) {
-      case 'time':
-        return `${day}-${month}-${year} ${time}`;
-      case 'simple':
-        return `${year}-${digimonth}-${day}`;
-      case 'reverse':
-        return `${year}-${digimonth}-${day}`;
-      case 'date':
-        return `${day}/${digimonth}/${year}`;
       case 'month':
         return `${month} ${day}, ${year}`;
       case 'string':

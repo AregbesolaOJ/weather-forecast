@@ -1,13 +1,5 @@
 import { useState } from 'react';
-import {
-  Alert,
-  Accordion,
-  Button,
-  Card,
-  Row,
-  Col,
-  Spinner
-} from 'react-bootstrap';
+import { Alert, Accordion, Card, Row, Col, Spinner } from 'react-bootstrap';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { useWeatherData } from '../hooks/useWeatherData';
 import {
@@ -17,37 +9,24 @@ import {
   getTimeZone,
   sortWeatherByDates
 } from '../utilities';
+import { WeatherIcon } from './WeatherIcon';
 import { WeatherInfo } from './WeatherInfo';
 
 export function CityCard({ id, name, price, location }) {
-  const [activeKey, setActiveKey] = useState(null);
   const [loading] = useState(null);
   const [error] = useState(null);
 
   //   const { loading, data, error } = useWeatherData(location);
-  const [data, setData] = useLocalStorage(location, {});
+  const [data] = useLocalStorage(location, {});
 
   const { city, list } = data || {};
 
   const myList = sortWeatherByDates(list);
-  const today = Object.keys(myList)[0];
-  const { [today]: todaysPayload, ...remainingDays } = myList;
-  console.log(location, {
-    data,
-    myList,
-    todaysPayload,
-    remainingDays
-  });
+  const datesArray = Object.keys(myList);
+  const today = datesArray[0];
+  const last = datesArray[datesArray.length - 1];
+  const { [today]: todaysPayload, [last]: sixthDay, ...remainingDays } = myList;
 
-  //   feels_like: 292.16
-  // grnd_level: 1016
-  // humidity: 51
-  // pressure: 1020
-  // sea_level: 1020
-  // temp: 292.81
-  // temp_kf: 2.43
-  // temp_max: 292.81
-  // temp_min: 290.38
   const {
     main = {},
     weather = [],
@@ -55,9 +34,7 @@ export function CityCard({ id, name, price, location }) {
     visibility
   } = todaysPayload?.[0] || {};
 
-  const toggleAccordion = () =>
-    setActiveKey((key) => (key === '0' ? null : '0'));
-
+  const { description } = weather?.[0] || {};
   return (
     <Card className="h-100">
       <Card.Body className="d-flex flex-column">
@@ -75,14 +52,15 @@ export function CityCard({ id, name, price, location }) {
           </div>
         ) : (
           <>
-            <Card.Title className="d-flex justify-content-between align-items-baseline mb-4">
+            <Card.Title className="d-flex justify-content-between align-items-center mb-4">
               <span className="fs-2">
                 {city ? `${city.name}, ${city.country}` : location}
               </span>
-              <Spinner color="blue" size="sm" animation="grow" />
+              {/* <Spinner color="blue" size="sm" animation="grow" /> */}
+              {description ? <WeatherIcon description={description} /> : null}
             </Card.Title>
             <Card.Subtitle className="mb-3">
-              <Row className="g-3" sm={2}>
+              <Row className="g-3" sm={2} xs={1}>
                 <Col>
                   <span className="paragraph">Population: </span>
                   <span className="paragraph text-muted">
@@ -122,8 +100,14 @@ export function CityCard({ id, name, price, location }) {
               </Row>
             </Card.Subtitle>
             <div className="mt-auto">
-              <h6 className="">Today's Weather</h6>
-              <Row className="g-3" sm={4}>
+              <span className="h6">Today's Weather</span>
+              {description ? (
+                <span className="text-capitalize paragraph-sm text-muted">
+                  {' '}
+                  - {description}
+                </span>
+              ) : null}
+              <Row className="g-3 mt-3" sm={3} xs={2}>
                 <Col>
                   <span className="paragraph-sm">Humidity: </span>
                   <span className="paragraph-sm text-muted">

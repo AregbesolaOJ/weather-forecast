@@ -20,6 +20,11 @@ body {
   min-height: 275px;
 }
 
+.card svg {
+  /* margin-bottom: 10px; */
+  /* border: 1px solid #000; */
+}
+
 .paragraph {
   font-size: 14px;
   line-height: 17px;
