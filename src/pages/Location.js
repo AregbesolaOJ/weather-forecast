@@ -1,6 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
 import {
-  Button,
   Toast,
   ToastContainer,
   Card,
@@ -10,6 +9,7 @@ import {
 } from 'react-bootstrap';
 import { formatNumberWithCommas, getTimeZone } from '../utilities';
 import { WeatherIcon } from '../components/WeatherIcon';
+import { Button } from '../components/Button';
 import { useLocation } from 'react-router-dom';
 
 export function Location() {

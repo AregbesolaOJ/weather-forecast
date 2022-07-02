@@ -11,7 +11,7 @@ export function Home() {
       <CurrentLocationWeather />
       <Row md={2} sm={1} xs={1} className="g-3 mt-4">
         {locations.map((item) => (
-          <Col key={item.id}>
+          <Col key={item.id} data-testid="location">
             <CityCard {...item} />
           </Col>
         ))}
