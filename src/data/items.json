@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "location": "Lagos"
+  },
+  {
+    "id": 2,
+    "location": "Abuja,"
+  },
+  {
+    "id": 3,
+    "location": "London"
+  },
+  {
+    "id": 4,
+    "location": "Los Angeles"
+  },
+  {
+    "id": 5,
+    "location": "Paris"
+  }
+]

@@ -1,3 +1,5 @@
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
 *,
 *::before,
 *::after {
@@ -12,4 +14,23 @@ body {
   line-height: normal;
   letter-spacing: normal;
   font-family: Arial, sans-serif;
+}
+
+.card {
+  min-height: 275px;
+}
+
+.card svg {
+  /* margin-bottom: 10px; */
+  /* border: 1px solid #000; */
+}
+
+.paragraph {
+  font-size: 14px;
+  line-height: 17px;
+}
+
+.paragraph-sm {
+  font-size: 12px;
+  line-height: 14px;
 }
