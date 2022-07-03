@@ -10,14 +10,9 @@ import {
 } from '../utilities';
 import { WeatherIcon } from './WeatherIcon';
 import { WeatherInfo } from './WeatherInfo';
-import { useState } from 'react';
-import { useLocalStorage } from '../hooks/useLocalStorage';
 
 export function CityCard({ location }) {
-  const [loading] = useState(null);
-  const [error] = useState(null);
-  const [data] = useLocalStorage(location, {});
-  //   const { loading, data, error } = useWeatherData(location);
+  const { loading, data, error } = useWeatherData(location);
 
   const navigate = useNavigate();
   const { city, list } = data || {};
