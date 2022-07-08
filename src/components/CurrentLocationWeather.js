@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import {
   Toast,
   ToastContainer,
@@ -7,7 +7,6 @@ import {
   Col,
   Spinner
 } from 'react-bootstrap';
-import { useLocalStorage } from '../hooks/useLocalStorage';
 import { formatNumberWithCommas, getTimeZone } from '../utilities';
 import { WeatherIcon } from './WeatherIcon';
 import { Button } from './Button';
@@ -33,10 +32,6 @@ export function CurrentLocationWeather() {
   } = currentLocationWeather || {};
 
   const { description } = weather?.[0] || {};
-  const [storedCurrentPosition, storeCurrentPosition] = useLocalStorage(
-    'storedCurrentPosition',
-    null
-  );
 
   const toggleToast = useCallback(() => {
     setShowToast(!showToast);
@@ -53,8 +48,6 @@ export function CurrentLocationWeather() {
       const params = {
         lat: position.coords.latitude,
         lon: position.coords.longitude,
-        // lat: '3.9470',
-        // lon: '7.3775',
         lang: 'en',
         units: 'metric'
       };
@@ -73,7 +66,6 @@ export function CurrentLocationWeather() {
         .then((response) => response.json())
         .then((response) => {
           setCurrentLocationWeather(response);
-          storeCurrentPosition(response);
           setLoading(false);
           setError(null);
         })
@@ -84,7 +76,7 @@ export function CurrentLocationWeather() {
           setError('ERR:');
         });
     },
-    [toggleToast, storeCurrentPosition]
+    [toggleToast]
   );
 
   function showPosition(position) {
@@ -125,13 +117,6 @@ export function CurrentLocationWeather() {
       toggleToast();
     }
   }
-
-  useEffect(() => {
-    if (!currentLocationWeather) {
-      setCurrentLocationWeather(storedCurrentPosition || null);
-    }
-    return () => {};
-  }, [currentLocationWeather, storedCurrentPosition]);
 
   return (
     <>
